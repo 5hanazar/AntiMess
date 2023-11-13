@@ -36,6 +36,7 @@
             this.pickButton = new AntiMess.MyButton();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.readyButton = new AntiMess.MyButton();
+            this.label2 = new System.Windows.Forms.Label();
             this.myPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -130,12 +131,24 @@
             this.readyButton.UseVisualStyleBackColor = true;
             this.readyButton.Click += new System.EventHandler(this.readyButton_Click);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.label2.Location = new System.Drawing.Point(301, 3);
+            this.label2.Margin = new System.Windows.Forms.Padding(0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(28, 13);
+            this.label2.TabIndex = 8;
+            this.label2.Text = "v1.1";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.ClientSize = new System.Drawing.Size(332, 297);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.buttonGit);
             this.Controls.Add(this.textBoxLog);
             this.Controls.Add(this.myPanel1);
@@ -163,6 +176,7 @@
         private MyPanel myPanel1;
         private System.Windows.Forms.TextBox textBoxLog;
         private System.Windows.Forms.Button buttonGit;
+        private System.Windows.Forms.Label label2;
     }
 }
 

@@ -33,13 +33,17 @@ namespace AntiMess
         private void CheckDirectory(string directoryInfo)
         {
             var dir = new DirectoryInfo(directoryInfo);
-            textBoxLog.Text += $"Checking: {directoryInfo}" + Environment.NewLine;
-            //if (dir.GetDirectories().Length == 0) textBoxLog.Text += $"No child: {directoryInfo + " " + IsNameUnderscore(dir)}" + Environment.NewLine;
+            dir.Attributes = dir.Attributes & ~FileAttributes.Hidden;
+            foreach (var file in dir.GetFiles())
+            {
+                file.Attributes = file.Attributes & ~FileAttributes.Hidden;
+            }
+            textBoxLog.Text += $"Barlandy: {directoryInfo}" + Environment.NewLine;
             foreach (var subdirectory in Directory.GetDirectories(directoryInfo))
             {
                 CheckDirectory(subdirectory);
             }
-            if (directoryInfo != textBox1.Text && IsNameUnderscore(dir)) MoveToParentAndDelete(dir);
+            if (directoryInfo != textBox1.Text && IsUselessFolder(dir)) MoveToParentAndDelete(dir);
         }
         private void MoveToParentAndDelete(DirectoryInfo directoryInfo)
         {
@@ -49,12 +53,12 @@ namespace AntiMess
                 {
                     string newPath = Path.Combine(directoryInfo.Parent.FullName, file.Name);
                     File.Move(file.FullName, newPath);
-                    textBoxLog.Text += $"Moved: {file.FullName}" + Environment.NewLine;
+                    textBoxLog.Text += $"Ýeri üýtgedildi: {file.FullName}" + Environment.NewLine;
                 } catch (Exception ex)
                 {
                     string newPath = Path.Combine(directoryInfo.Parent.FullName, $"{Path.GetFileNameWithoutExtension(file.Name)}_dupl{file.Extension}");
                     File.Move(file.FullName, newPath);
-                    textBoxLog.Text += $"Moved: {file.FullName}" + Environment.NewLine;
+                    textBoxLog.Text += $"Ýeri üýtgedildi: {file.FullName}" + Environment.NewLine;
                 }
             }
             foreach (var file in directoryInfo.GetDirectories())
@@ -63,23 +67,27 @@ namespace AntiMess
                 {
                     string newPath = Path.Combine(directoryInfo.Parent.FullName, file.Name);
                     Directory.Move(file.FullName, newPath);
-                    textBoxLog.Text += $"Moved: {file.FullName}" + Environment.NewLine;
+                    textBoxLog.Text += $"Ýeri üýtgedildi: {file.FullName}" + Environment.NewLine;
                 }
                 catch (Exception ex)
                 {
                     string newPath = Path.Combine(directoryInfo.Parent.FullName, $"{file.Name}_dupl");
                     Directory.Move(file.FullName, newPath);
-                    textBoxLog.Text += $"Moved: {file.FullName}" + Environment.NewLine;
+                    textBoxLog.Text += $"Ýeri üýtgedildi: {file.FullName}" + Environment.NewLine;
                 }
             }
             directoryInfo.Delete();
-            textBoxLog.Text += $"Deleted: {directoryInfo.FullName}" + Environment.NewLine;
+            textBoxLog.Text += $"Ýok edildi: {directoryInfo.FullName}" + Environment.NewLine;
+        }
+        private bool IsUselessFolder(DirectoryInfo directoryInfo)
+        {
+            if (directoryInfo.Name.ToLower().Replace("  ", " ") == "bu disk") return true;
+            return IsNameUnderscore(directoryInfo);
         }
         private bool IsNameUnderscore(DirectoryInfo directoryInfo)
         {
             return directoryInfo.Name.All(c => c == '_');
         }
-
         private void buttonGit_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start("https://github.com/5hanazar/AntiMess");
